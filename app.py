@@ -12,36 +12,48 @@ st.set_page_config(
 )
 
 # --- THEME TOGGLE ---
-theme = st.sidebar.radio("🌓 Toggle Theme", ["Light", "Dark"])
-if theme == "Dark":
-    st.markdown("""
+theme = st.sidebar.radio("🌓 Theme", ["Light", "Dark"])
+
+# --- CUSTOM THEME CSS ---
+def set_theme(theme):
+    if theme == "Dark":
+        st.markdown("""
         <style>
-        body {
+        .stApp {
             background-color: #0e1117;
             color: #FAFAFA;
         }
-        .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
-            color: #FAFAFA !important;
+        h1, h2, h3, h4, h5, h6 {
+            color: #FAFAFA;
+        }
+        .stButton>button {
+            background-color: #F63366;
+            color: white;
         }
         </style>
         """, unsafe_allow_html=True)
-else:
-    st.markdown("""
+    else:
+        st.markdown("""
         <style>
-        body {
+        .stApp {
             background-color: #FFFFFF;
             color: #262730;
         }
-        .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
-            color: #262730 !important;
+        h1, h2, h3, h4, h5, h6 {
+            color: #262730;
+        }
+        .stButton>button {
+            background-color: #4CAF50;
+            color: white;
         }
         </style>
         """, unsafe_allow_html=True)
+
+set_theme(theme)
 
 # --- HEADER ---
 st.title("🧠 AI Image Caption Generator")
 st.markdown("### Upload an image or choose a demo, and let AI describe what's in it!")
-
 st.markdown("---")
 
 # --- MAIN LAYOUT ---
@@ -52,20 +64,15 @@ with col1:
     uploaded_file = st.file_uploader("Upload JPG, PNG", type=["jpg", "jpeg", "png"])
 
     st.subheader("📸 Or select a demo image")
-    demo_option = st.selectbox(
-        "Choose a demo image:",
-        ["None", "Cat", "Beach", "Street"],
-        index=0
-    )
+    demo_option = st.selectbox("Choose a demo image:", ["None", "Cat", "Mountains", "Street"], index=0)
 
-    # Load demo image
     demo_image = None
     if demo_option != "None":
         demo_path = os.path.join("demo_images", f"{demo_option.lower()}.jpg")
         if os.path.exists(demo_path):
             demo_image = Image.open(demo_path)
 
-    # Prioritize uploaded file
+    # Final image selection
     if uploaded_file:
         image = Image.open(uploaded_file)
         st.image(image, caption="🖼️ Your Uploaded Image", use_container_width=True)
