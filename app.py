@@ -19,6 +19,7 @@ st.markdown("### Upload an image and let AI describe what's in it!")
 
 st.markdown("---")
 
+
 # Layout with columns
 col1, col2 = st.columns([1, 2])
 
@@ -36,6 +37,10 @@ with col2:
             caption = generate_caption(image)
         st.success("✅ Caption generated successfully!")
         st.markdown(f"### 📝 Caption:\n**{caption}**")
+        st.download_button("💾 Download Caption", caption, file_name="caption.txt")
+        st.code(caption, language="text")
+
+
 
 # Sidebar with project info
 with st.sidebar:
